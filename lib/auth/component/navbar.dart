@@ -33,7 +33,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color.fromRGBO(1, 180, 220, 1),
+      backgroundColor: Colors.orange,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -85,7 +85,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               ),
               Text(
-                "Cendekia",
+                "E-Library",
                 style: TextStyle(
                     fontFamily: font,
                     fontSize: 15,
@@ -116,7 +116,7 @@ Widget _drawerHeader() {
         Container(
           //margin: EdgeInsets.only(top: 15),
           child: Text(
-            'Cendekia',
+            'E-Library',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.w700,

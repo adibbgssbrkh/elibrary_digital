@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elibrary_digital/auth/component/accountcheck.dart';
 import 'package:elibrary_digital/auth/component/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:elibrary_digital/pages/home.dart';
 import 'package:elibrary_digital/auth/login.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -45,7 +47,7 @@ class _RegisterState extends State<Register> {
   }
 
   int index = 0;
-  final String font = 'Baloo 2';
+  final String font = 'Glory-Bold';
 
   bool isPasswordVisible = false;
 
@@ -185,7 +187,21 @@ class _RegisterState extends State<Register> {
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(height: 20),
+          AccountCheck(
+            login: false,
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Login();
+                  },
+                ),
+              );
+            },
+          ),
+          const SizedBox(
             height: 30,
           ),
           Container(
@@ -203,23 +219,22 @@ class _RegisterState extends State<Register> {
   void signUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {
       try {
-        var myUser = await _auth
-            .createUserWithEmailAndPassword(email: email, password: password)
-            .then((value) => {postDetailsToFirestore()})
-            .catchError((e) {
-          Fluttertoast.showToast(msg: e!.message);
-        });
-
-        // await myUser.user!.sendEmailVerification();
-        // Get.defaultDialog(
-        //     title: "Email Verifikasi",
-        //     middleText: "Kami telah mengirimkan email verifikasi ke $email",
-        //     onConfirm: () {
-        //       postDetailsToFirestore();
-        //       Get.back();
-        //       Get.back();
-        //     },
-        //     textConfirm: "Ya saya akan cek email");
+        UserCredential myUser = await _auth.createUserWithEmailAndPassword(
+            email: email, password: password);
+        //     .then((value) => {postDetailsToFirestore()})
+        //     .catchError((e) {
+        //   Fluttertoast.showToast(msg: e!.message);
+        // });
+        await myUser.user!.sendEmailVerification();
+        Get.defaultDialog(
+            title: "Email Verifikasi",
+            middleText: "Kami telah mengirimkan email verifikasi ke $email",
+            onConfirm: () {
+              postDetailsToFirestore();
+              Get.back();
+              Get.back();
+            },
+            textConfirm: "Ya saya akan cek email");
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":
