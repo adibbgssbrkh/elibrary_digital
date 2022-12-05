@@ -19,16 +19,16 @@ class _HomeState extends State<Home> {
   String searchValue = '';
   final List<String> _suggestions = [
     'API connection',
-    'Albania',
-    'Algeria',
-    'Australia',
-    'Brazil',
-    'German',
-    'Indonesia',
-    'Madagascar',
-    'Mozambique',
-    'Portugal',
-    'Zambia'
+    'Penetration testing',
+    'Android development',
+    'Android developer fundamental',
+    'Sistem informasi perangkat lunak',
+    'Web developer for beginner',
+    'Pentest for beginner',
+    'Web mobile',
+    'Aplikasi berbasi android dan ios',
+    'Pemrograman game',
+    'Game developer fundamental'
   ];
 
   Future<List<String>> _fetchSuggestions(String searchValue) async {
