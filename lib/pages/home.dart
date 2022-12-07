@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
                   onSearch: (value) => setState(() => searchValue = value),
                   asyncSuggestions: (value) async =>
                       await _fetchSuggestions(value)),
-              drawer: const DrawerWidget(),
+              drawer: const Profile(),
               body: ListView.separated(
                   itemBuilder: (context, index) {
                     return GestureDetector(

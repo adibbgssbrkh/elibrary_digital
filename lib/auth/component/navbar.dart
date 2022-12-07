@@ -16,19 +16,19 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   User? user = FirebaseAuth.instance.currentUser;
-  UserModel loggedInUser = UserModel();
+  // UserModel loggedInUser = UserModel();
 
-  void initState() {
-    super.initState();
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      this.loggedInUser = UserModel.fromMap(value.data());
-      setState(() {});
-    });
-  }
+  // void initState() {
+  //   super.initState();
+  //   FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(user!.uid)
+  //       .get()
+  //       .then((value) {
+  //     this.loggedInUser = UserModel.fromMap(value.data());
+  //     setState(() {});
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +37,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          _drawerHeader(),
-          const SizedBox(height: 15),
-          _drawerItem(
-            icon: Icons.alternate_email,
-            text: "${loggedInUser.email}",
-          ),
-          _drawerItem(
-            icon: Icons.alternate_email,
-            text: '${loggedInUser.username}',
-          ),
+          // _drawerHeader(),
+          // const SizedBox(height: 15),
+          // _drawerItem(
+          //   icon: Icons.alternate_email,
+          //   text: "${loggedInUser.email}",
+          // ),
+          // _drawerItem(
+          //   icon: Icons.alternate_email,
+          //   text: '${loggedInUser.username}',
+          // ),
           Divider(height: 50, thickness: 2),
           Container(
             margin: EdgeInsets.only(

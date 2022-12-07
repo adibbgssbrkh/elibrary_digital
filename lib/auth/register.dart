@@ -272,24 +272,24 @@ class _RegisterState extends State<Register> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    UserModel userModel = UserModel();
+    // UserModel userModel = UserModel();
 
     // writing all the values
 
     //userModel.uid = user?.uid;
 
-    userModel.uid = user?.uid;
+    // userModel.uid = user?.uid;
 
-    userModel.username = usernameeditController.text;
-    userModel.email = user!.email;
+    // userModel.username = usernameeditController.text;
+    // userModel.email = user!.email;
 
-    userModel.password = passwordeditController.text;
+    // userModel.password = passwordeditController.text;
 
-    await firebaseFirestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Account created successfully :) ");
+    // await firebaseFirestore
+    //     .collection("users")
+    //     .doc(user.uid)
+    //     .set(userModel.toMap());
+    // Fluttertoast.showToast(msg: "Account created successfully :) ");
 
     // Navigator.pushAndRemoveUntil(
     //     (context),

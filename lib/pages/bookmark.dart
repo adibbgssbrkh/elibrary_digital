@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elibrary_digital/pages/bookview.dart';
 import 'package:flutter/material.dart';
 import 'package:elibrary_digital/pages/home.dart';
 import 'package:elibrary_digital/auth/login.dart';
 import 'package:elibrary_digital/auth/profile.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
+
+import 'bookmodel.dart';
 
 class Bookamark extends StatefulWidget {
   const Bookamark({super.key});
@@ -16,16 +19,16 @@ class _BookamarkState extends State<Bookamark> {
   String searchValue = '';
   final List<String> _suggestions = [
     'API connection',
-    'Albania',
-    'Algeria',
-    'Australia',
-    'Brazil',
-    'German',
-    'Indonesia',
-    'Madagascar',
-    'Mozambique',
-    'Portugal',
-    'Zambia'
+    'Penetration testing',
+    'Android development',
+    'Android developer fundamental',
+    'Sistem informasi perangkat lunak',
+    'Web developer for beginner',
+    'Pentest for beginner',
+    'Web mobile',
+    'Aplikasi berbasi android dan ios',
+    'Pemrograman game',
+    'Game developer fundamental'
   ];
 
   Future<List<String>> _fetchSuggestions(String searchValue) async {
@@ -38,523 +41,612 @@ class _BookamarkState extends State<Bookamark> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: EasySearchBar(
-            title: const Text('E-LIBRARY'),
-            backgroundColor: Colors.orange,
-            onSearch: (value) => setState(() => searchValue = value),
-            asyncSuggestions: (value) async => await _fetchSuggestions(value)),
-        drawer: Drawer(
-            child: ListView(padding: EdgeInsets.zero, children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.orange,
-            ),
-            child: Text('Menu Lainnya'),
-          ),
-          ListTile(
-              title: const Text('Profile'),
-              onTap: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const Profile();
-                  }))),
-        ])),
-        body: ListView(
-          children: <Widget>[
-            Container(
-              width: 300,
-              height: 150,
-              // margin: EdgeInsets.only(bottom: 25),
-              color: Colors.orange,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: 300,
-                    margin: EdgeInsets.only(top: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            "E-LIBRARY",
-                            style: TextStyle(
-                                fontFamily: "Glory-Bold", fontSize: 30),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 300,
-                    margin: EdgeInsets.only(top: 42),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(right: 129),
-                          child: IconButton(
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return Home();
-                              }));
-                            },
-                            icon: Icon(Icons.home_outlined),
-                            iconSize: 35,
-                          ),
-                        ),
-                        Container(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.bookmark),
-                            iconSize: 35,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: 750,
-              color: Colors.grey,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      child: Row(
-                    children: <Widget>[
-                      Container(
-                          width: 150,
-                          height: 290,
-                          color: Colors.white,
-                          margin: EdgeInsets.only(top: 25, left: 24),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                width: 150,
-                                height: 150,
-                                color: Colors.white,
-                                child: Image(
-                                  image:
-                                      AssetImage("assets/images/splash01.png"),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              Container(
-                                  margin: EdgeInsets.only(left: 7),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance.collection('book').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var book =
+                snapshot.data!.docs.map((e) => Book.fromSnapshot(e)).toList();
+            return Scaffold(
+              appBar: EasySearchBar(
+                  title: const Text('E-LIBRARY'),
+                  backgroundColor: Colors.orange,
+                  onSearch: (value) => setState(() => searchValue = value),
+                  asyncSuggestions: (value) async =>
+                      await _fetchSuggestions(value)),
+              drawer: Profile(),
+              body: ListView.separated(
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: 400,
+                            height: 150,
+                            // margin: EdgeInsets.only(bottom: 25),
+                            color: Colors.orange,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: 300,
+                                  margin: EdgeInsets.only(top: 15),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       Container(
                                         child: Text(
-                                          "Penetration Testing for Beginner A Hands-On Introduction to Hacking",
+                                          "E-LIBRARY",
                                           style: TextStyle(
                                               fontFamily: "Glory-Bold",
-                                              fontSize: 15),
+                                              fontSize: 30),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 300,
+                                  margin: EdgeInsets.only(top: 42),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(right: 129),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return Home();
+                                            }));
+                                          },
+                                          icon: Icon(Icons.home_outlined),
+                                          iconSize: 35,
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "Georgia Weidman",
-                                          style: TextStyle(
-                                              fontFamily: "Glory-Bold",
-                                              fontSize: 11,
-                                              color: Colors.green),
+                                        child: IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(Icons.bookmark),
+                                          iconSize: 35,
                                         ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "495 Halaman",
-                                          style: TextStyle(
-                                            fontFamily: "Glory-Bold",
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Row(
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 800,
+                            color: Colors.grey,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                    child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                        width: 150,
+                                        height: 360,
+                                        color: Colors.white,
+                                        margin:
+                                            EdgeInsets.only(top: 25, left: 24),
+                                        child: Column(
                                           children: <Widget>[
                                             Container(
-                                              // child: LikeButton(
-                                              //   size: 30,
-                                              //   circleColor: CircleColor(
-                                              //       start: Color(0xff00ddff),
-                                              //       end: Color(0xff0099cc)),
-                                              //   bubblesColor: BubblesColor(
-                                              //     dotPrimaryColor:
-                                              //         Color(0xff33b5e5),
-                                              //     dotSecondaryColor:
-                                              //         Color(0xff0099cc),
-                                              //   ),
-                                              //   likeBuilder: (bool isLiked) {
-                                              //     return Icon(
-                                              //       Icons.home,
-                                              //       color: isLiked
-                                              //           ? Colors
-                                              //               .deepPurpleAccent
-                                              //           : Colors.grey,
-                                              //       size: 30,
-                                              //     );
-                                              //   },
-                                              //   likeCount: 665,
-                                              //   countBuilder: (int count,
-                                              //       bool isLiked, String text) {
-                                              //     var color = isLiked
-                                              //         ? Colors.deepPurpleAccent
-                                              //         : Colors.grey;
-                                              //     Widget result;
-                                              //     if (count == 0) {
-                                              //       result = Text(
-                                              //         "love",
-                                              //         style: TextStyle(
-                                              //             color: color),
-                                              //       );
-                                              //     } else
-                                              //       result = Text(
-                                              //         text,
-                                              //         style: TextStyle(
-                                              //             color: color),
-                                              //       );
-                                              //     return result;
-                                              //   },
-                                              // ),
-                                              // LikeButton(
-                                              //   onTap: onLikeButtonTapped,
-                                              // ),
-                                              // Future<bool> onLikeButtonTapped(bool isLiked) async{
-                                              //   /// send your request here
-                                              //   // final bool success= await sendRequest();
+                                                width: 150,
+                                                height: 204,
+                                                color: Colors.white,
+                                                child: Column(
+                                                  children: [
+                                                    Image.network(
+                                                        book[index].image)
+                                                  ],
+                                                )),
+                                            Container(
+                                                margin:
+                                                    EdgeInsets.only(left: 7),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 10),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return Bookview();
+                                                        }));
+                                                      },
+                                                      child: Text(
+                                                          book[index].judul),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].author,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "Glory-Bold",
+                                                            fontSize: 11,
+                                                            color:
+                                                                Colors.green),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].halaman,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              "Glory-Bold",
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Container(
+                                                            // child: LikeButton(
+                                                            //   size: 30,
+                                                            //   circleColor: CircleColor(
+                                                            //       start: Color(0xff00ddff),
+                                                            //       end: Color(0xff0099cc)),
+                                                            //   bubblesColor: BubblesColor(
+                                                            //     dotPrimaryColor:
+                                                            //         Color(0xff33b5e5),
+                                                            //     dotSecondaryColor:
+                                                            //         Color(0xff0099cc),
+                                                            //   ),
+                                                            //   likeBuilder: (bool isLiked) {
+                                                            //     return Icon(
+                                                            //       Icons.home,
+                                                            //       color: isLiked
+                                                            //           ? Colors
+                                                            //               .deepPurpleAccent
+                                                            //           : Colors.grey,
+                                                            //       size: 30,
+                                                            //     );
+                                                            //   },
+                                                            //   likeCount: 665,
+                                                            //   countBuilder: (int count,
+                                                            //       bool isLiked, String text) {
+                                                            //     var color = isLiked
+                                                            //         ? Colors.deepPurpleAccent
+                                                            //         : Colors.grey;
+                                                            //     Widget result;
+                                                            //     if (count == 0) {
+                                                            //       result = Text(
+                                                            //         "love",
+                                                            //         style: TextStyle(
+                                                            //             color: color),
+                                                            //       );
+                                                            //     } else
+                                                            //       result = Text(
+                                                            //         text,
+                                                            //         style: TextStyle(
+                                                            //             color: color),
+                                                            //       );
+                                                            //     return result;
+                                                            //   },
+                                                            // ),
+                                                            // LikeButton(
+                                                            //   onTap: onLikeButtonTapped,
+                                                            // ),
+                                                            // Future<bool> onLikeButtonTapped(bool isLiked) async{
+                                                            //   /// send your request here
+                                                            //   // final bool success= await sendRequest();
 
-                                              //   /// if failed, you can do nothing
-                                              //   // return success? !isLiked:isLiked;
+                                                            //   /// if failed, you can do nothing
+                                                            //   // return success? !isLiked:isLiked;
 
-                                              //   return !isLiked;
-                                              // }
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    Icon(Icons.favorite_border),
-                                                iconSize: 30,
-                                              ),
-                                            ),
-                                            Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 15),
-                                              child: Text(
-                                                "495",
-                                                style: TextStyle(
-                                                  fontFamily: "Glory-Bold",
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon: Icon(Icons.bookmark),
-                                                iconSize: 30,
-                                              ),
-                                            )
+                                                            //   return !isLiked;
+                                                            // }
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .favorite_border),
+                                                              iconSize: 30,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 15),
+                                                            child: Text(
+                                                              "495",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    "Glory-Bold",
+                                                                fontSize: 15,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .bookmark),
+                                                              iconSize: 30,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
                                           ],
+                                        )),
+                                    Container(
+                                        width: 150,
+                                        height: 360,
+                                        color: Colors.white,
+                                        margin: EdgeInsets.only(
+                                          top: 25,
+                                          left: 40,
                                         ),
-                                      )
-                                    ],
-                                  ))
-                            ],
-                          )),
-                      Container(
-                          width: 150,
-                          height: 290,
-                          color: Colors.white,
-                          margin: EdgeInsets.only(
-                            top: 25,
-                            left: 40,
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                width: 150,
-                                height: 150,
-                                color: Colors.white,
-                                child: Image(
-                                  image:
-                                      AssetImage("assets/images/splash01.png"),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              Container(
-                                  margin: EdgeInsets.only(left: 7),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        child: Text(
-                                          "Penetration Testing for Beginner A Hands-On Introduction to Hacking",
-                                          style: TextStyle(
-                                              fontFamily: "Glory-Bold",
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "Georgia Weidman",
-                                          style: TextStyle(
-                                              fontFamily: "Glory-Bold",
-                                              fontSize: 11,
-                                              color: Colors.green),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "495 Halaman",
-                                          style: TextStyle(
-                                            fontFamily: "Glory-Bold",
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Row(
+                                        child: Column(
                                           children: <Widget>[
                                             Container(
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    Icon(Icons.favorite_border),
-                                                iconSize: 30,
-                                              ),
-                                            ),
+                                                width: 150,
+                                                height: 204,
+                                                color: Colors.white,
+                                                child: Column(
+                                                  children: [
+                                                    Image.network(
+                                                        book[index].image2)
+                                                  ],
+                                                )),
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 15),
-                                              child: Text(
-                                                "495",
-                                                style: TextStyle(
-                                                  fontFamily: "Glory-Bold",
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon: Icon(Icons.bookmark),
-                                                iconSize: 30,
-                                              ),
-                                            )
+                                                margin:
+                                                    EdgeInsets.only(left: 7),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 10),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return Bookview();
+                                                        }));
+                                                      },
+                                                      child: Text(
+                                                          book[index].judul2),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].author2,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "Glory-Bold",
+                                                            fontSize: 11,
+                                                            color:
+                                                                Colors.green),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].halaman2,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              "Glory-Bold",
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Container(
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .favorite_border),
+                                                              iconSize: 30,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 15),
+                                                            child: Text(
+                                                              "495",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    "Glory-Bold",
+                                                                fontSize: 15,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .bookmark),
+                                                              iconSize: 30,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
                                           ],
-                                        ),
-                                      )
-                                    ],
-                                  ))
-                            ],
-                          ))
-                    ],
-                  )),
-                  Container(
-                      child: Row(
-                    children: <Widget>[
-                      Container(
-                          width: 150,
-                          height: 290,
-                          color: Colors.white,
-                          margin: EdgeInsets.only(top: 25, left: 24),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                width: 150,
-                                height: 150,
-                                color: Colors.white,
-                                child: Image(
-                                  image:
-                                      AssetImage("assets/images/splash01.png"),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              Container(
-                                  margin: EdgeInsets.only(left: 7),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        child: Text(
-                                          "Penetration Testing for Beginner A Hands-On Introduction to Hacking",
-                                          style: TextStyle(
-                                              fontFamily: "Glory-Bold",
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "Georgia Weidman",
-                                          style: TextStyle(
-                                              fontFamily: "Glory-Bold",
-                                              fontSize: 11,
-                                              color: Colors.green),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "495 Halaman",
-                                          style: TextStyle(
-                                            fontFamily: "Glory-Bold",
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Row(
+                                        ))
+                                  ],
+                                )),
+                                Container(
+                                    child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                        width: 150,
+                                        height: 360,
+                                        color: Colors.white,
+                                        margin:
+                                            EdgeInsets.only(top: 25, left: 24),
+                                        child: Column(
                                           children: <Widget>[
                                             Container(
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    Icon(Icons.favorite_border),
-                                                iconSize: 30,
-                                              ),
-                                            ),
+                                                width: 150,
+                                                height: 215,
+                                                color: Colors.white,
+                                                child: Column(
+                                                  children: [
+                                                    Image.network(
+                                                        book[index].image3)
+                                                  ],
+                                                )),
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 15),
-                                              child: Text(
-                                                "495",
-                                                style: TextStyle(
-                                                  fontFamily: "Glory-Bold",
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    Icon(Icons.bookmark_border),
-                                                iconSize: 30,
-                                              ),
-                                            )
+                                                margin:
+                                                    EdgeInsets.only(left: 7),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 10),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return Bookview();
+                                                        }));
+                                                      },
+                                                      child: Text(
+                                                          book[index].judul3),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].author3,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "Glory-Bold",
+                                                            fontSize: 11,
+                                                            color:
+                                                                Colors.green),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].halaman3,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              "Glory-Bold",
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Container(
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .favorite_border),
+                                                              iconSize: 30,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 15),
+                                                            child: Text(
+                                                              "495",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    "Glory-Bold",
+                                                                fontSize: 15,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .bookmark_border),
+                                                              iconSize: 30,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
                                           ],
+                                        )),
+                                    Container(
+                                        width: 150,
+                                        height: 360,
+                                        color: Colors.white,
+                                        margin: EdgeInsets.only(
+                                          top: 25,
+                                          left: 40,
                                         ),
-                                      )
-                                    ],
-                                  ))
-                            ],
-                          )),
-                      Container(
-                          width: 150,
-                          height: 290,
-                          color: Colors.white,
-                          margin: EdgeInsets.only(
-                            top: 25,
-                            left: 40,
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                width: 150,
-                                height: 150,
-                                color: Colors.white,
-                                child: Image(
-                                  image:
-                                      AssetImage("assets/images/splash01.png"),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              Container(
-                                  margin: EdgeInsets.only(left: 7),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        child: Text(
-                                          "Penetration Testing for Beginner A Hands-On Introduction to Hacking",
-                                          style: TextStyle(
-                                              fontFamily: "Glory-Bold",
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "Georgia Weidman",
-                                          style: TextStyle(
-                                              fontFamily: "Glory-Bold",
-                                              fontSize: 11,
-                                              color: Colors.green),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Text(
-                                          "495 Halaman",
-                                          style: TextStyle(
-                                            fontFamily: "Glory-Bold",
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        child: Row(
+                                        child: Column(
                                           children: <Widget>[
                                             Container(
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    Icon(Icons.favorite_border),
-                                                iconSize: 30,
-                                              ),
-                                            ),
+                                                width: 150,
+                                                height: 205,
+                                                color: Colors.white,
+                                                child: Column(
+                                                  children: [
+                                                    Image.network(
+                                                        book[index].image4)
+                                                  ],
+                                                )),
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 15),
-                                              child: Text(
-                                                "495",
-                                                style: TextStyle(
-                                                  fontFamily: "Glory-Bold",
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    Icon(Icons.bookmark_border),
-                                                iconSize: 30,
-                                              ),
-                                            )
+                                                margin:
+                                                    EdgeInsets.only(left: 7),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    TextButton(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize: 10),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return Bookview();
+                                                        }));
+                                                      },
+                                                      child: Text(
+                                                          book[index].judul4),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].author4,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "Glory-Bold",
+                                                            fontSize: 11,
+                                                            color:
+                                                                Colors.green),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5, left: 7),
+                                                      child: Text(
+                                                        book[index].halaman4,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              "Glory-Bold",
+                                                          fontSize: 10,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 5),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Container(
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .favorite_border),
+                                                              iconSize: 30,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 15),
+                                                            child: Text(
+                                                              "495",
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    "Glory-Bold",
+                                                                fontSize: 15,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: IconButton(
+                                                              onPressed: () {},
+                                                              icon: Icon(Icons
+                                                                  .bookmark_border),
+                                                              iconSize: 30,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ))
                                           ],
-                                        ),
-                                      )
-                                    ],
-                                  ))
-                            ],
-                          ))
-                    ],
-                  )),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                                        ))
+                                  ],
+                                )),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider();
+                  },
+                  itemCount: book.length),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              value: 0.20,
+            ),
+          );
+        });
   }
 }
 

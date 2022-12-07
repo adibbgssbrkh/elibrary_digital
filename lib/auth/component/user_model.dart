@@ -1,32 +1,30 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserModel {
-  String? uid;
-  String? username;
-  String? email;
-  String? password;
+class Users {
+  String username;
+  String email;
+  String password;
 
-  UserModel({
-    this.uid,
-    this.username,
-    this.email,
-    this.password,
+  Users({
+    required this.username,
+    required this.email,
+    required this.password,
   });
 
   // receiving data from server
-  factory UserModel.fromMap(map) {
-    return UserModel(
-      uid: map['uid'],
-      username: map['username'],
-      email: map['email'],
-      password: map['password'],
+  factory Users.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> json) {
+    return Users(
+      username: json['username'],
+      email: json['email'],
+      password: json['password'],
     );
   }
 
   // sending data to our server
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> tojson() {
     return {
-      'uid': uid,
       'username': username,
       'email': email,
       'password': password,

@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                     child: TextFormField(
                       controller: user,
                       decoration: InputDecoration(
-                        labelText: 'Username',
+                        labelText: 'Email',
                         labelStyle: TextStyle(
                           fontFamily: "Glory-Bold",
                         ),
